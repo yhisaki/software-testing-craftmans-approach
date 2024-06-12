@@ -12,6 +12,10 @@ target_include_directories(triangle PUBLIC include)
 add_library(next_date src/next_date.cpp)
 target_include_directories(next_date PUBLIC include)
 
+# Commission library
+add_library(commission src/commission.cpp)
+target_include_directories(commission PUBLIC include)
+
 # GoogleTest setup
 enable_testing()
 find_package(GTest REQUIRED)
@@ -30,3 +34,10 @@ target_link_libraries(test_next_date ${GTEST_LIBRARIES} pthread next_date)
 
 # Add test
 add_test(NAME test_next_date COMMAND test_next_date)
+
+# Test executable for commission
+add_executable(test_commission test/test_commission.cpp)
+target_link_libraries(test_commission ${GTEST_LIBRARIES} pthread commission)
+
+# Add test
+add_test(NAME test_commission COMMAND test_commission)
