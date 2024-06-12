@@ -10,5 +10,5 @@ struct Date
 };
 
 bool isLeapYear(int year);
-Date nextDateSimple(int month, int day, int year);
+Date nextDate1(Date today);
 #endif // NEXT_DATA_HPP_

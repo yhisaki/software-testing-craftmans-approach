@@ -12,11 +12,11 @@ bool isLeapYear(int year)
     return false;
 }
 
-Date nextDateSimple(int month, int day, int year)
+Date nextDate1(Date today)
 {
-    Date tomorrow = {day, month, year};
+    Date tomorrow = {today.day, today.month, today.year};
 
-    switch (month)
+    switch (today.month)
     {
     case 1:
     case 3:
@@ -24,57 +24,67 @@ Date nextDateSimple(int month, int day, int year)
     case 7:
     case 8:
     case 10:
-        if (day < 31)
+        if (today.day < 31)
         {
-            tomorrow.day = day + 1;
+            tomorrow.day = today.day + 1;
+        }
+        else if (today.day == 31)
+        {
+            tomorrow.day = 1;
+            tomorrow.month = today.month + 1;
         }
         else
         {
-            tomorrow.day = 1;
-            tomorrow.month = month + 1;
+            throw std::out_of_range("Cannot have 31 days in a month");
         }
         break;
     case 4:
     case 6:
     case 9:
     case 11:
-        if (day < 30)
+        if (today.day < 30)
         {
-            tomorrow.day = day + 1;
+            tomorrow.day = today.day + 1;
+        }
+        else if (today.day == 30)
+        {
+            tomorrow.day = 1;
+            tomorrow.month = today.month + 1;
+        }
+        else if (today.day == 31)
+        {
+            throw std::out_of_range("Cannot have 30 days in a month");
         }
         else
         {
-            tomorrow.day = 1;
-            tomorrow.month = month + 1;
+            throw std::out_of_range("Cannot have 31 days in a month");
         }
         break;
     case 12:
-        if (day < 31)
+        if (today.day < 31)
         {
-            tomorrow.day = day + 1;
+            tomorrow.day = today.day + 1;
         }
-        else
+        else if (today.day == 31)
         {
             tomorrow.day = 1;
             tomorrow.month = 1;
-            if (year == 2012)
-            {
-                throw std::out_of_range("2012 is over");
-            }
-            else
-            {
-                tomorrow.year = year + 1;
-            }
+
+            tomorrow.year = today.year + 1;
+        }
+        else
+        {
+            throw std::out_of_range("Cannot have 31 days in a month");
         }
         break;
     case 2:
-        if (day < 28)
+        if (today.day < 28)
         {
-            tomorrow.day = day + 1;
+            tomorrow.day = today.day + 1;
         }
-        else if (day == 28)
+        else if (today.day == 28)
         {
-            if (isLeapYear(year))
+            if (isLeapYear(today.year))
             {
                 tomorrow.day = 29;
             }
@@ -84,19 +94,24 @@ Date nextDateSimple(int month, int day, int year)
                 tomorrow.month = 3;
             }
         }
-        else if (day == 29)
+        else if (today.day == 29)
         {
-            if (isLeapYear(year))
+            if (isLeapYear(today.year))
             {
                 tomorrow.day = 1;
                 tomorrow.month = 3;
             }
             else
             {
-                std::out_of_range("Day out of range");
+                throw std::out_of_range("Cannot have Feb 29 in a non-leap year");
             }
+        }
+        else
+        {
+            throw std::out_of_range("Cannot have 30 days in Feb");
         }
         break;
     }
+
     return tomorrow;
 }
